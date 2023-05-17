@@ -10,12 +10,11 @@ class UserModel():
             conn = get_connection1()
             users=[]
             with conn.cursor() as cursor:
-                cursor.execute("SELECT * FROM USUARIOS")
+                cursor.execute("SELECT * FROM persona")
                 resultado=cursor.fetchall()
-                
                 for u in resultado:
                     user = User(u[0],u[1],u[2],u[3],u[4],u[5])
-                    users.append(user)
+                    users.append(user.to_JSON())
             conn.close()
             return users
         except Exception as ex:
