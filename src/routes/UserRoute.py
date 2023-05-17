@@ -14,3 +14,14 @@ def get_usuarios():
         return jsonify(users)
     except Exception as ex:
         return jsonify({'message': str(ex)}), 500
+
+@main.route('/<id>')
+def get_user(id):
+    try:
+        user = UserModel.get_user(id)
+        if user != None:
+            return jsonify(user)
+        else:
+            return jsonify({}),404
+    except Exception as ex:
+        return jsonify({'message': str(ex)}), 500

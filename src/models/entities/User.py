@@ -1,7 +1,9 @@
+from utils.DateFormat import DateFormat
+
 class User():
 
-    def __init__(self,id_persona=None,nombre=None,apellido1=None,apellido2=None,fecha=None,tipo_sexo=None) -> None:
-        self.id_persona=id_persona
+    def __init__(self, id_persona=None, nombre=None, apellido1=None, apellido2=None, fecha=None, tipo_sexo=None) -> None:
+        self.id_persona = id_persona
         self.nombre = nombre
         self.apellido1 = apellido1
         self.apellido2 = apellido2
@@ -9,7 +11,7 @@ class User():
         self.tipo_sexo = tipo_sexo
 
     def to_JSON(self):
-        return{
+        return {
             'id_persona': self.id_persona,
             'nombre': self.nombre,
             'apellido1': self.apellido1,
@@ -18,7 +20,7 @@ class User():
             'tipo_sexo': self.tipo_sexo
         }
 
-    # def __init__(self, id, cedula_identidad=None, nombre=None, primer_apellido=None, segundo_apellido=None, fecha_nacimiento=None) -> None:
+    # def __init__(self, id=None, cedula_identidad=None, nombre=None, primer_apellido=None, segundo_apellido=None, fecha_nacimiento=None) -> None:
     #     self.id = id
     #     self.cedula_identidad = cedula_identidad
     #     self.nombre = nombre
@@ -33,5 +35,5 @@ class User():
     #         'nombre': self.nombre,
     #         'primer_apellido': self.primer_apellido,
     #         'segundo_apellido': self.segundo_apellido,
-    #         'fecha_nacimiento': self.fecha_nacimiento
+    #         'fecha_nacimiento': DateFormat.convertir_fecha(self.fecha_nacimiento)
     #     }
