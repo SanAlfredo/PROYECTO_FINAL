@@ -10,7 +10,7 @@ def get_connection():
             port=config('PGSQL_PORT'),
             user=config('PGSQL_USER'),
             password=config('PGSQL_PASSWORD'),
-            database=config('postgres')
+            database='postgres'
         )
     except DatabaseError as ex:
         raise ex

@@ -5,14 +5,15 @@ from .entities.User import User
 class UserModel():
 
     # class method para instanciarlo de donde sea
-    #obtenemos todos los usuarios
+    #region obtenemos todos los usuarios
     @classmethod
     def get_users(self):
         try:
             conn = get_connection1()
             users = []
             with conn.cursor() as cursor:
-                cursor.execute("SELECT * FROM persona")
+                #cursor.execute("SELECT * FROM persona")
+                cursor.execute("SELECT * FROM usuarios")
                 resultado = cursor.fetchall()
                 for u in resultado:
                     user = User(u[0], u[1], u[2], u[3], u[4], u[5])
@@ -21,13 +22,15 @@ class UserModel():
             return users
         except Exception as ex:
             raise ex
-    #obtenemos solo 1 usuario
+    #endregion
+    #region obtenemos solo 1 usuario
     @classmethod
     def get_user(self,id_usuario):
         try:
             conn = get_connection1()
             with conn.cursor() as cursor:
-                cursor.execute("SELECT * FROM persona where id_persona = %s",(id_usuario,))
+                #cursor.execute("SELECT * FROM persona where id_persona = %s",(id_usuario,))
+                cursor.execute("SELECT * FROM usuarios where id = %s",(id_usuario,))
                 resultado = cursor.fetchone()
                 user = None
                 if resultado != None:
@@ -37,3 +40,20 @@ class UserModel():
             return user
         except Exception as ex:
             raise ex
+    #endregion
+    #region insertar un usuario
+    @classmethod
+    def add_user(self,usuario):
+        try:
+            conn = get_connection1()
+            with conn.cursor() as cursor:
+                cursor.execute("""INSERT INTO usuarios (id, cedula_identidad, nombre, primer_apellido, segundo_apellido, fecha_nacimiento)
+                                VALUES (%s,%s,%s,%s,%s,%s)""",(usuario.id,usuario.cedula_identidad,usuario.nombre,usuario.primer_apellido,
+                                                               usuario.segundo_apellido,usuario.fecha_nacimiento))
+                filas=cursor.rowcount()
+                conn.commit()
+            conn.close()
+            return filas
+        except Exception as ex:
+            raise ex
+    #endregion
