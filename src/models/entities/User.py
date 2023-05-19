@@ -2,9 +2,7 @@ from utils.DateFormat import DateFormat
 
 class User():
 
-    
-
-    def __init__(self, id=None, cedula_identidad=None, nombre=None, primer_apellido=None, segundo_apellido=None, fecha_nacimiento=None) -> None:
+    def __init__(self, id, cedula_identidad=None, nombre=None, primer_apellido=None, segundo_apellido=None, fecha_nacimiento=None) -> None:
         self.id = id
         self.cedula_identidad = cedula_identidad
         self.nombre = nombre

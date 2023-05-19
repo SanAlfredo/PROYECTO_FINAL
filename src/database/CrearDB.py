@@ -28,11 +28,11 @@ class CrearDB():
                     cursor1.execute('''
                         CREATE TABLE IF NOT EXISTS USUARIOS(
                             ID CHARACTER(36),
-                            CEDULA_IDENTIDAD INT,
-                            NOMBRE VARCHAR(30),
-                            PRIMER_APELLIDO VARCHAR(30),
-                            SEGUNDO_APELLIDO VARCHAR(30),
-                            FECHA_NACIMIENTO DATE,
+                            CEDULA_IDENTIDAD INT NOT NULL,
+                            NOMBRE VARCHAR(30) NOT NULL,
+                            PRIMER_APELLIDO VARCHAR(30) NOT NULL,
+                            SEGUNDO_APELLIDO VARCHAR(30) NOT NULL,
+                            FECHA_NACIMIENTO DATE NOT NULL,
                             PRIMARY KEY (ID));
                         ''')
                 conn1.close()
