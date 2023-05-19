@@ -34,7 +34,7 @@ def get_user(id):
         if user != None:
             return jsonify(user)
         else:
-            return jsonify({}), 404
+            return jsonify({"message":"no se pudo encontrar al usuario"}), 404
     except Exception as ex:
         return jsonify({'message': str(ex)}), 500
 # endregion
@@ -93,7 +93,7 @@ def add_user():
                 user = User(id, cedula_identidad, nombre,
                             primer_apellido, segundo_apellido, fecha_nacimiento)
                 resultado = UserModel.add_user(user)
-                if resultado:
+                if resultado==1:
                     return jsonify(user.id)
                 else:
                     return jsonify({'message': 'Error al insertar'}), 500
@@ -102,7 +102,42 @@ def add_user():
     else:
         return jsonify({"message": "la fecha no tiene el formato correcto"}), 404
 # endregion
+# region ruta para actualizar al usuario
 
+
+@main.route('/<id>', methods=['PUT'])
+@expects_json(schema)
+def update_user(id):
+    if valDate(request.json['nacimiento']):
+        if request.json['apellido1'] == "" and request.json['apellido2'] == "":
+            return jsonify({"message": "Al menos un apellido se debe llenar"}), 404
+        else:
+            if request.json['apellido1'] == "" and request.json['apellido2'] != "":
+                primer_apellido = "no hay apellido paterno"
+                segundo_apellido = request.json["apellido2"].lower()
+            if request.json['apellido2'] == "" and request.json['apellido1'] != "":
+                primer_apellido = request.json["apellido1"].lower()
+                segundo_apellido = "no hay apellido materno"
+            if request.json['apellido1'] != "" and request.json['apellido2'] != "":
+                primer_apellido = request.json["apellido1"].lower()
+                segundo_apellido = request.json["apellido2"].lower()
+            nombre = request.json['nombre'].lower()
+            cedula_identidad = request.json['cedula']
+            fecha_nacimiento = request.json['nacimiento']
+
+            try:
+                user = User(id, cedula_identidad, nombre,
+                            primer_apellido, segundo_apellido, fecha_nacimiento)
+                resultado = UserModel.update_user(user)
+                if resultado==1:
+                    return jsonify(user.id)
+                else:
+                    return jsonify({'message': 'Error al actualizar los campos'}), 500
+            except Exception as ex:
+                return jsonify({'message': str(ex)}), 500
+    else:
+        return jsonify({"message": "la fecha no tiene el formato correcto"}), 404
+# endregion
 # region ruta usuario get 1 usuario por id
 
 
@@ -111,15 +146,24 @@ def delete_user(id):
     try:
         user = User(id)
         resultado = UserModel.delete_user(user)
-        if resultado:
+        if resultado==1:
             return jsonify({"message": "Eliminado con éxito"})
         else:
-            return jsonify({"message": "El archivo ya fue eliminado no existe en la base de datos"})
+            return jsonify({"message": "El archivo ya fue eliminado, no existe en la base de datos"}), 404
     except Exception as ex:
         return jsonify({'message': str(ex)}), 500
 # endregion
 # region Validar el formato de la fecha
 
+#region Promedio de edad
+@main.route('/promedio-edad')
+def promedio():
+    try:
+        users = UserModel.promedio_users()
+        return jsonify({"promedioEdad":users})
+    except Exception as ex:
+        return jsonify({'message': str(ex)}), 500
+#endregion
 
 def valDate(fecha):
     try:

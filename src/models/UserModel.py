@@ -51,31 +51,68 @@ class UserModel():
 
     @classmethod
     def add_user(self, user):
+        filas=0
         try:
             conn = get_connection1()
             with conn.cursor() as cursor:
                 cursor.execute("""INSERT INTO usuarios (id, cedula_identidad, nombre, primer_apellido, segundo_apellido, fecha_nacimiento)
                                 VALUES (%s,%s,%s,%s,%s,%s)""", (user.id, user.cedula_identidad, user.nombre, user.primer_apellido,
                                                                 user.segundo_apellido, user.fecha_nacimiento),)
-                #filas = cursor.rowcount()
+                filas = cursor.rowcount
                 conn.commit()
             conn.close()
-            return True
+            return filas
         except:
-            return False    
+            return filas    
+    # endregion
+    # region actualizar un usuario
+
+    @classmethod
+    def update_user(self, user):
+        filas=0
+        try:
+            conn = get_connection1()
+            with conn.cursor() as cursor:
+                cursor.execute("""UPDATE usuarios SET cedula_identidad = %s, nombre = %s, primer_apellido = %s, segundo_apellido = %s, fecha_nacimiento = %s
+                                WHERE id = %s""", (user.cedula_identidad, user.nombre, user.primer_apellido,user.segundo_apellido, user.fecha_nacimiento,user.id),)
+                filas = cursor.rowcount
+                conn.commit()
+            conn.close()
+            return filas
+        except:
+            return filas    
     # endregion
 
     # region elimina un usuario
 
     @classmethod
     def delete_user(self, user):
+        filas=0
         try:
             conn = get_connection1()
             with conn.cursor() as cursor:
                 cursor.execute("DELETE FROM usuarios WHERE id = %s", (user.id,))
+                filas = cursor.rowcount
                 conn.commit()
             conn.close()
-            return True
+            return filas
         except Exception:
-            return False    
+            return filas    
+    # endregion
+    # region obtenemos todos los usuarios
+    @classmethod
+    def promedio_users(self):
+        prom = 0
+        try:
+            #users = []
+            conn = get_connection1()
+            with conn.cursor() as cursor:
+                cursor.execute("SELECT AVG(EXTRACT(YEAR FROM AGE(NOW(),fecha_nacimiento))) AS promedio FROM usuarios")
+                resultado = cursor.fetchone()
+                if resultado:
+                    prom = round(resultado[0],1)
+            conn.close()
+            return prom
+        except:
+            return prom
     # endregion
